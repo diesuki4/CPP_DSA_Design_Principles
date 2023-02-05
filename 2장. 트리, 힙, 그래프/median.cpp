@@ -6,77 +6,77 @@ using namespace std;
 
 struct median
 {
-    // maxHeap + Áß¾Ó°ª + minHeapÀÇ »óÅÂ¸¦ À¯ÁöÇÑ´Ù.
-    // (°¡Àå Å« ¼ö) - Áß¾Ó°ª - (°¡Àå ÀÛÀº ¼ö) ±¸Á¶¸¦ ÅëÇØ Áß¾Ó°ªÀ» ºü¸£°Ô Ã£´Â´Ù.
+    // maxHeap + ì¤‘ì•™ê°’ + minHeapì˜ ìƒíƒœë¥¼ ìœ ì§€í•œë‹¤.
+    // (ê°€ì¥ í° ìˆ˜) - ì¤‘ì•™ê°’ - (ê°€ì¥ ì‘ì€ ìˆ˜) êµ¬ì¡°ë¥¼ í†µí•´ ì¤‘ì•™ê°’ì„ ë¹ ë¥´ê²Œ ì°¾ëŠ”ë‹¤.
     priority_queue<int> maxHeap;
     priority_queue<int, vector<int>, greater<int>> minHeap;
 
-    // data°¡ Áß¾Ó°ªº¸´Ù ÀÛÀ¸¸é maxHeap, Å©¸é minHeap¿¡ ÀúÀåÇÑ´Ù.
-    // maxHeap°ú minHeapÀÇ Å©±â Â÷ÀÌ´Â ¸Å¼ø°£ 1À» ³ÑÁö ¾Ê´Â´Ù.
+    // dataê°€ ì¤‘ì•™ê°’ë³´ë‹¤ ì‘ìœ¼ë©´ maxHeap, í¬ë©´ minHeapì— ì €ì¥í•œë‹¤.
+    // maxHeapê³¼ minHeapì˜ í¬ê¸° ì°¨ì´ëŠ” ë§¤ìˆœê°„ 1ì„ ë„˜ì§€ ì•ŠëŠ”ë‹¤.
     void insert(int data)
     {
-        // ¿ø¼Ò°¡ ¾ø°Å³ª minHeap¿¡ 1°³ ÀÖÀ» °æ¿ì
-        // (minHeapÀ¸·Î ±¸ÇöÇØµµ µÈ´Ù.)
+        // ì›ì†Œê°€ ì—†ê±°ë‚˜ minHeapì— 1ê°œ ìˆì„ ê²½ìš°
+        // (minHeapìœ¼ë¡œ êµ¬í˜„í•´ë„ ëœë‹¤.)
         if (maxHeap.size() == 0)
         {
-            // maxHeap¿¡ ³Ö´Â´Ù.
+            // maxHeapì— ë„£ëŠ”ë‹¤.
             maxHeap.emplace(data);
 
             return;
         }
-        // maxHeap, minHeapÀÇ ¿ø¼Ò °³¼ö°¡ °°À» °æ¿ì
+        // maxHeap, minHeapì˜ ì›ì†Œ ê°œìˆ˜ê°€ ê°™ì„ ê²½ìš°
         if (maxHeap.size() == minHeap.size())
         {
-            // data°¡ Áß¾Ó°ªº¸´Ù ÀÛÀ¸¸é
+            // dataê°€ ì¤‘ì•™ê°’ë³´ë‹¤ ì‘ìœ¼ë©´
             if (data <= get())
-                // maxHeap¿¡ ³Ö´Â´Ù.
+                // maxHeapì— ë„£ëŠ”ë‹¤.
                 maxHeap.emplace(data);
-            // Áß¾Ó°ªº¸´Ù Å©¸é
+            // ì¤‘ì•™ê°’ë³´ë‹¤ í¬ë©´
             else
-                // minHeap¿¡ ³Ö´Â´Ù.
+                // minHeapì— ë„£ëŠ”ë‹¤.
                 minHeap.emplace(data);
 
             return;
         }
-        // minHeapÀÌ 1°³ ´õ ¸¹À¸¸é
+        // minHeapì´ 1ê°œ ë” ë§ìœ¼ë©´
         else if (maxHeap.size() < minHeap.size())
         {
-            // data°¡ Áß¾Ó°ªº¸´Ù Å©¸é
+            // dataê°€ ì¤‘ì•™ê°’ë³´ë‹¤ í¬ë©´
             if (data > get())
             {
-                // minHeapÀÇ °¡Àå ÀÛÀº ¿ø¼Ò¸¦ maxHeapÀ¸·Î ¿Å±â°í
-                // (¿Å°ÜÁø ¿ø¼Ò´Â maxHeapÀÇ ·çÆ®¿¡ À§Ä¡ÇÏ°Ô µÈ´Ù.)
+                // minHeapì˜ ê°€ì¥ ì‘ì€ ì›ì†Œë¥¼ maxHeapìœ¼ë¡œ ì˜®ê¸°ê³ 
+                // (ì˜®ê²¨ì§„ ì›ì†ŒëŠ” maxHeapì˜ ë£¨íŠ¸ì— ìœ„ì¹˜í•˜ê²Œ ëœë‹¤.)
                 maxHeap.emplace(minHeap.top());
                 minHeap.pop();
-                // minHeap¿¡ ³Ö´Â´Ù.
+                // minHeapì— ë„£ëŠ”ë‹¤.
                 minHeap.emplace(data);
             }
-            // Áß¾Ó°ªº¸´Ù ÀÛÀ¸¸é
+            // ì¤‘ì•™ê°’ë³´ë‹¤ ì‘ìœ¼ë©´
             else
             {
-                // maxHeap¿¡ ³Ö´Â´Ù.
+                // maxHeapì— ë„£ëŠ”ë‹¤.
                 maxHeap.emplace(data);
             }
 
             return;
         }
-        // maxHeapÀÌ 1°³ ´õ ¸¹À¸¸é
+        // maxHeapì´ 1ê°œ ë” ë§ìœ¼ë©´
         else
         {
-            // data°¡ Áß¾Ó°ªº¸´Ù ÀÛÀ¸¸é
+            // dataê°€ ì¤‘ì•™ê°’ë³´ë‹¤ ì‘ìœ¼ë©´
             if (data < get())
             {
-                // maxHeapÀÇ °¡Àå Å« ¿ø¼Ò¸¦ minHeapÀ¸·Î ¿Å±â°í
-                // (¿Å°ÜÁø ¿ø¼Ò´Â minHeapÀÇ ·çÆ®¿¡ À§Ä¡ÇÏ°Ô µÈ´Ù.)
+                // maxHeapì˜ ê°€ì¥ í° ì›ì†Œë¥¼ minHeapìœ¼ë¡œ ì˜®ê¸°ê³ 
+                // (ì˜®ê²¨ì§„ ì›ì†ŒëŠ” minHeapì˜ ë£¨íŠ¸ì— ìœ„ì¹˜í•˜ê²Œ ëœë‹¤.)
                 minHeap.emplace(maxHeap.top());
                 maxHeap.pop();
-                // maxHeap¿¡ ³Ö´Â´Ù.
+                // maxHeapì— ë„£ëŠ”ë‹¤.
                 maxHeap.emplace(data);
             }
-            // Áß¾Ó°ªº¸´Ù Å©¸é
+            // ì¤‘ì•™ê°’ë³´ë‹¤ í¬ë©´
             else
             {
-                // minHeap¿¡ ³Ö´Â´Ù.
+                // minHeapì— ë„£ëŠ”ë‹¤.
                 minHeap.emplace(data);
             }
         }
@@ -84,17 +84,17 @@ struct median
 
     double get()
     {
-        // ¿ø¼Ò°¡ Â¦¼ö°³ ÀÖÀ¸¸é
+        // ì›ì†Œê°€ ì§ìˆ˜ê°œ ìˆìœ¼ë©´
         if (maxHeap.size() == minHeap.size())
-            // °¡¿îµ¥ µÎ ¼öÀÇ Æò±ÕÀÌ Áß¾Ó°ªÀÌ´Ù.
+            // ê°€ìš´ë° ë‘ ìˆ˜ì˜ í‰ê· ì´ ì¤‘ì•™ê°’ì´ë‹¤.
             return (maxHeap.top() + minHeap.top()) / 2.0;
-        // minHeapÀÌ 1°³ ´õ ¸¹À¸¸é
+        // minHeapì´ 1ê°œ ë” ë§ìœ¼ë©´
         if (maxHeap.size() < minHeap.size())
-            // minHeapÀÇ ·çÆ®°¡ Áß¾Ó°ªÀÌ´Ù.
+            // minHeapì˜ ë£¨íŠ¸ê°€ ì¤‘ì•™ê°’ì´ë‹¤.
             return minHeap.top();
-        // maxHeapÀÌ 1°³ ´õ ¸¹À¸¸é
+        // maxHeapì´ 1ê°œ ë” ë§ìœ¼ë©´
         else
-            //maxHeapÀÇ ·çÆ®°¡ Áß¾Ó°ªÀÌ´Ù.
+            //maxHeapì˜ ë£¨íŠ¸ê°€ ì¤‘ì•™ê°’ì´ë‹¤.
             return maxHeap.top();
     }
 };
@@ -104,17 +104,17 @@ void main()
     median med;
 
     med.insert(1);
-    cout << "1 »ğÀÔ ÈÄ Áß¾Ó°ª: " << med.get() << endl;
+    cout << "1 ì‚½ì… í›„ ì¤‘ì•™ê°’: " << med.get() << endl;
 
     med.insert(5);
-    cout << "5 »ğÀÔ ÈÄ Áß¾Ó°ª: " << med.get() << endl;
+    cout << "5 ì‚½ì… í›„ ì¤‘ì•™ê°’: " << med.get() << endl;
 
     med.insert(2);
-    cout << "2 »ğÀÔ ÈÄ Áß¾Ó°ª: " << med.get() << endl;
+    cout << "2 ì‚½ì… í›„ ì¤‘ì•™ê°’: " << med.get() << endl;
 
     med.insert(10);
-    cout << "10 »ğÀÔ ÈÄ Áß¾Ó°ª: " << med.get() << endl;
+    cout << "10 ì‚½ì… í›„ ì¤‘ì•™ê°’: " << med.get() << endl;
 
     med.insert(40);
-    cout << "40 »ğÀÔ ÈÄ Áß¾Ó°ª: " << med.get() << endl;
+    cout << "40 ì‚½ì… í›„ ì¤‘ì•™ê°’: " << med.get() << endl;
 }
