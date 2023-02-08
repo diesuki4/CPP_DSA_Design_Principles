@@ -60,7 +60,7 @@ void main()
     map.insert(10);
     print(25);
 
-    // 2와 100의 해시 값이 같다.
+    // 2와 100의 해시 값은 같다.
     map.insert(100);
     print(100);
     print(2);
