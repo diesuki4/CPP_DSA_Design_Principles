@@ -4,8 +4,14 @@
 
 using namespace std;
 
-void print(vector<int> v);
-void print(vector<float> v);
+template <typename T>
+void print(vector<T> v)
+{
+    for (T e : v)
+        cout << e << " ";
+    
+    cout << endl;
+}
 
 void main()
 {

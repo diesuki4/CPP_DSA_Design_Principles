@@ -4,7 +4,13 @@
 
 using namespace std;
 
-void print(vector<int> v);
+void print(vector<int> v)
+{
+    for (int e : v)
+        cout << e << " ";
+    
+    cout << endl;
+}
 
 void main()
 {

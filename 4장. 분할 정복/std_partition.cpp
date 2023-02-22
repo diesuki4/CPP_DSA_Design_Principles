@@ -4,7 +4,13 @@
 
 using namespace std;
 
-void print(vector<int>::iterator fromInclusive, vector<int>::iterator toExclusive);
+void print(vector<int>::iterator fromInclusive, vector<int>::iterator toExclusive)
+{
+    while (fromInclusive != toExclusive)
+        cout << *(fromInclusive++) << " ";
+    
+    cout << endl;
+}
 
 void main()
 {
