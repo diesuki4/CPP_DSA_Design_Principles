@@ -1,9 +1,9 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 #include <set>
 #include <map>
-#include <queue>
+#include <stack>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,7 +24,7 @@ private:
 
 public:
     // N개의 정점으로 구성된 그래프
-    Graph(unsigned N) : V(N) {}
+    Graph(unsigned V) : V(V) {}
 
     // 정점 개수 반환
     unsigned vertices() const { return V; }
@@ -32,7 +32,7 @@ public:
     // 간선 리스트 반환
     vector<Edge<T>>& edges() const { return edge_list; }
 
-    // v가 출발지인 모든 간선을 반환
+    // v가 출발지인 모든 간선 반환
     vector<Edge<T>> edges(unsigned v) const
     {
         vector<Edge<T>> edges_from_v;
@@ -50,29 +50,27 @@ public:
             cerr << "에러: 유효 범위를 벗어난 정점!" << endl;
     }
 
-    template <typename U>
-    friend ostream& operator << (ostream& os, const Graph<U>& G);
-};
-
-template <typename U>
-ostream& operator << (ostream& os, const Graph<U>& G)
-{
-    for (unsigned i = 1; i < G.vertices(); ++i)
+    friend ostream& operator << (ostream& os, const Graph<T>& G)
     {
-        os << i << ":\t";
+        for (unsigned i = 1; i < G.vertices(); ++i)
+        {
+            os << i << ":\t";
 
-        for (Edge<U>& e : G.edges(i))
-            os << "{" << e.dst << ": " << e.weight << "}, ";
+            for (Edge<T>& e : G.edges(i))
+                os << "{" << e.dst << ": " << e.weight << "}, ";
 
-        os << endl;
+            os << endl;
+        }
+
+        return os;
     }
-
-    return os;
-}
+};
 
 template <typename T>
 Graph<T> create_reference_graph()
 {
+    // 정점이 8개인 그래프 생성
+    // 0번 ID는 사용하지 않는다.
     Graph<T> G(9);
 
     map<unsigned, vector<pair<unsigned, T>>> edge_map;
@@ -93,17 +91,17 @@ Graph<T> create_reference_graph()
 }
 
 template <typename T>
-vector<unsigned> breadth_first_search(const Graph<T>& G, unsigned start)
+vector<unsigned> depth_first_search(const Graph<T>& G, unsigned start)
 {
     set<unsigned> visited;          // 방문한 정점
     vector<unsigned> visit_order;   // 방문 순서
-    queue<unsigned> que;
+    stack<unsigned> stck;
 
-    que.push(start);
+    stck.push(start);
 
-    while (!que.empty())
+    while (!stck.empty())
     {
-        unsigned current_vertex = que.front(); que.pop();
+        unsigned current_vertex = stck.top(); stck.pop();
 
         if (visited.find(current_vertex) == visited.end())
         {
@@ -112,7 +110,7 @@ vector<unsigned> breadth_first_search(const Graph<T>& G, unsigned start)
 
             for (Edge<T>& e : G.edges(current_vertex))
                 if (visited.find(e.dst) == visited.end())
-                    que.push(e.dst);
+                    stck.push(e.dst);
         }
     }
 
@@ -127,11 +125,11 @@ void main()
     cout << "[입력 그래프]" << endl;
     cout << G << endl;
 
-    // 1번 정점부터 BFS 수행
-    vector<T> bfs_visit_order = breadth_first_search<T>(G, 1);
+    // 1번 정점부터 DFS 수행
+    vector<T> dfs_visit_order = depth_first_search<T>(G, 1);
 
     // 방문 순서 출력
-    cout << "[BFS 방문 순서]" << endl;
-    for (T v : bfs_visit_order)
+    cout << "[DFS 방문 순서]" << endl;
+    for (T v : dfs_visit_order)
         cout << v << endl;
 }
