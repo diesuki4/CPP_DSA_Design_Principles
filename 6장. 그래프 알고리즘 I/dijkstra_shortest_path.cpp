@@ -103,35 +103,42 @@ struct Label
     }
 };
 
-// 매 번 경계에서 가장 가까운 정점을 선택한다.
 template <typename T>
-vector<unsigned> prim_MST(const Graph<T>& G, unsigned src)
+vector<unsigned> dijkstra_shortest_path(const Graph<T>& G, unsigned src, unsigned dst)
 {
     priority_queue<Label<T>, vector<Label<T>>, greater<Label<T>>> heap;
     vector<T> distance(G.vertices(), numeric_limits<T>::max());
 
     set<unsigned> visited;
-    vector<unsigned> MST;
+    vector<unsigned> parent(G.vertices());
 
     heap.emplace(Label<T>{src, 0});
+    parent[src] = src;
 
     while (!heap.empty())
     {
         Label<T> current_vertex = heap.top(); heap.pop();
 
+        if (current_vertex.ID == dst)
+        {
+            cout << current_vertex.ID << "번 정점(목적 정점)에 도착!" << endl;
+            break;
+        }
+
         if (visited.find(current_vertex.ID) == visited.end())
         {
-            MST.emplace_back(current_vertex.ID);
+            cout << current_vertex.ID << "번 정점에 안착!" << endl;
 
             for (Edge<T>& e : G.edges(current_vertex.ID))
             {
                 unsigned neighbor = e.dst;
-                T new_distance = e.weight;
+                T new_distance = current_vertex.distance + e.weight;
 
                 // 경계로부터의 거리를 갱신
                 if (new_distance < distance[neighbor])
                 {
                     heap.emplace(Label<T>{neighbor, new_distance});
+                    parent[neighbor] = current_vertex.ID;
                     distance[neighbor] = new_distance;
                 }
             }
@@ -140,7 +147,19 @@ vector<unsigned> prim_MST(const Graph<T>& G, unsigned src)
         }
     }
 
-    return MST;
+    vector<unsigned> shortest_path;
+    unsigned current_vertex = dst;
+
+    while (current_vertex != src)
+    {
+        shortest_path.emplace_back(current_vertex);
+        current_vertex = parent[current_vertex];
+    }
+
+    shortest_path.emplace_back(src);
+    reverse(shortest_path.begin(), shortest_path.end());
+
+    return shortest_path;
 }
 
 void main()
@@ -152,10 +171,10 @@ void main()
     cout << G << endl;
 
     // aaaa
-    vector<T> MST = prim_MST<T>(G, 1);
+    vector<T> shortest_path = dijkstra_shortest_path<T>(G, 1, 6);
 
     // bbbb
-    cout << "[최소 신장 트리]" << endl;
-    for (unsigned v : MST)
-        cout << v << endl;
+    cout << endl << "[1번과 6번 정점 사이의 최단 경로]" << endl;
+    for (unsigned v : shortest_path)
+        cout << v << " ";
 }
